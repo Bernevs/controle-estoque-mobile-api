@@ -13,7 +13,9 @@ export class ClienteRepository {
   }
 
   static async getCliente(): Promise<Cliente[] | null> {
-    const result = await pool.query("SELECT * FROM clientes WHERE status = 1");
+    const result = await pool.query(
+      "SELECT * FROM clientes WHERE status = 1 ORDER BY nome"
+    );
 
     const row = result.rows;
 

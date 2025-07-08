@@ -27,7 +27,9 @@ export class ProdutoRepository {
   }
 
   static async getProduto(): Promise<Produto[]> {
-    const result = await pool.query("SELECT * FROM produtos WHERE status = 1");
+    const result = await pool.query(
+      "SELECT * FROM produtos WHERE status = 1 ORDER BY nome"
+    );
 
     const row: Produto[] = result.rows;
 
