@@ -24,9 +24,9 @@ export class PagamentoController {
 
   static async getPagamento(req: Request, res: Response): Promise<any> {
     try {
-      const { cliente_id } = req.body;
+      const { cliente_id } = req.params;
 
-      const result = await PagamentoService.getPagamento(cliente_id);
+      const result = await PagamentoService.getPagamento(Number(cliente_id));
 
       return res.status(200).json({ pagamento: result });
     } catch (error: any) {

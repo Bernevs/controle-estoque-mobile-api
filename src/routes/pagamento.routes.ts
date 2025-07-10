@@ -4,7 +4,7 @@ import { PagamentoController } from "../controller/PagamentoController";
 const pagamentoRouter = Router();
 
 pagamentoRouter.post("/", PagamentoController.createPagamento);
-pagamentoRouter.get("/", PagamentoController.getPagamento);
+pagamentoRouter.get("/cliente/:cliente_id", PagamentoController.getPagamento);
 pagamentoRouter.get("/:id", PagamentoController.getPagamentoById);
 pagamentoRouter.put("/:id", PagamentoController.updatePagamento);
 pagamentoRouter.delete("/:id", PagamentoController.deletePagamento);
