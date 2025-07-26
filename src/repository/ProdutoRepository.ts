@@ -4,12 +4,13 @@ import { Produto } from "../model/Produto";
 export class ProdutoRepository {
   static async createProduto(produto: Produto): Promise<Produto> {
     const result = await pool.query(
-      "INSERT INTO produtos (nome, preco_compra, preco_venda, quantidade, status) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      "INSERT INTO produtos (nome, preco_compra, preco_venda, quantidade, automatico, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
       [
         produto.nome,
         produto.preco_compra,
         produto.preco_venda,
         produto.quantidade,
+        produto.automatico,
         produto.status,
       ]
     );
@@ -28,7 +29,7 @@ export class ProdutoRepository {
 
   static async getProduto(): Promise<Produto[]> {
     const result = await pool.query(
-      "SELECT * FROM produtos WHERE status = 1 ORDER BY nome"
+      "SELECT * FROM produtos WHERE status = 1 ORDER BY nome ASC"
     );
 
     const row: Produto[] = result.rows;
@@ -41,6 +42,7 @@ export class ProdutoRepository {
           preco_compra: produto.preco_compra,
           preco_venda: produto.preco_venda,
           quantidade: produto.quantidade,
+          automatico: produto.automatico,
           status: produto.status,
         })
     );
@@ -60,12 +62,13 @@ export class ProdutoRepository {
       preco_compra: row.preco_compra,
       preco_venda: row.preco_venda,
       quantidade: row.quantidade,
+      automatico: row.automatico,
       status: row.status,
     });
   }
 
   static async updateProduto(produto: Produto): Promise<Produto> {
-    console.log("Recebido no repository:", produto);
+    console.log(produto);
     const result = await pool.query(
       "UPDATE produtos SET nome = $2, preco_compra = $3, preco_venda = $4, quantidade = $5 WHERE id = $1 AND status = 1 RETURNING*",
       [
@@ -86,6 +89,7 @@ export class ProdutoRepository {
       preco_compra: row.preco_compra,
       preco_venda: row.preco_venda,
       quantidade: row.quantidade,
+      automatico: row.automatico,
       status: row.status,
     });
   }

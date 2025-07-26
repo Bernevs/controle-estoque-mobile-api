@@ -4,6 +4,7 @@ interface ProdutoProps {
   preco_compra: number;
   preco_venda: number;
   quantidade: number;
+  automatico?: number;
   status?: number;
 }
 
@@ -13,6 +14,7 @@ export class Produto {
   preco_compra: number;
   preco_venda: number;
   quantidade: number;
+  automatico?: number;
   status?: number;
 
   constructor({
@@ -21,6 +23,7 @@ export class Produto {
     preco_compra,
     preco_venda,
     quantidade,
+    automatico,
     status,
   }: ProdutoProps) {
     this.id = id;
@@ -28,6 +31,7 @@ export class Produto {
     this.preco_compra = preco_compra;
     this.preco_venda = preco_venda;
     this.quantidade = quantidade;
+    this.automatico = automatico;
     this.status = status;
   }
 }
