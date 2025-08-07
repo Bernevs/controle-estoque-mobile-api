@@ -29,7 +29,7 @@ export class ProdutoRepository {
 
   static async getProduto(): Promise<Produto[]> {
     const result = await pool.query(
-      "SELECT * FROM produtos WHERE status = 1 ORDER BY nome ASC"
+      "SELECT * FROM produtos WHERE status = 1 AND quantidade > 0 ORDER BY nome ASC"
     );
 
     const row: Produto[] = result.rows;
@@ -67,8 +67,16 @@ export class ProdutoRepository {
     });
   }
 
+  static async getPrecoVenda(id: number): Promise<number> {
+    const result = await pool.query(
+      "SELECT preco_venda FROM produtos WHERE id = $1",
+      [id]
+    );
+
+    return result.rows[0].preco_venda;
+  }
+
   static async updateProduto(produto: Produto): Promise<Produto> {
-    console.log(produto);
     const result = await pool.query(
       "UPDATE produtos SET nome = $2, preco_compra = $3, preco_venda = $4, quantidade = $5 WHERE id = $1 AND status = 1 RETURNING*",
       [
@@ -81,7 +89,6 @@ export class ProdutoRepository {
     );
 
     const row: Produto = result.rows[0];
-    console.log(row);
 
     return new Produto({
       id: row.id,
@@ -92,6 +99,22 @@ export class ProdutoRepository {
       automatico: row.automatico,
       status: row.status,
     });
+  }
+
+  static async atualizarEstoque(
+    id: number,
+    quantidade: number
+  ): Promise<boolean> {
+    const result = await pool.query(
+      "UPDATE produtos SET quantidade = quantidade - $2 WHERE id = $1 AND quantidade >= $2",
+      [id, quantidade]
+    );
+
+    if (result.rowCount == 1) {
+      return true;
+    }
+
+    return false;
   }
 
   static async deleteProduto(id: number) {

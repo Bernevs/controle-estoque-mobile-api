@@ -24,6 +24,12 @@ export class ProdutoService {
     return result;
   }
 
+  static async getPrecoVenda(id: number): Promise<number> {
+    const result = await ProdutoRepository.getPrecoVenda(id);
+
+    return result;
+  }
+
   static async updateProduto(produto: Produto): Promise<Produto> {
     const result = await ProdutoRepository.updateProduto(produto);
 

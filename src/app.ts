@@ -4,6 +4,7 @@ import clienteRouter from "./routes/cliente.routes";
 import produtoRouter from "./routes/produto.routes";
 import pagamentoRouter from "./routes/pagamento.routes";
 import bodyParser from "body-parser";
+import pedidoRouter from "./routes/pedido.routes";
 
 dotenv.config();
 
@@ -15,5 +16,6 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use("/cliente", clienteRouter);
 app.use("/produto", produtoRouter);
 app.use("/pagamento", pagamentoRouter);
+app.use("/pedido", pedidoRouter);
 
 export default app;
