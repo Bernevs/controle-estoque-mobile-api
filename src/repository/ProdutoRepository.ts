@@ -27,10 +27,17 @@ export class ProdutoRepository {
     });
   }
 
-  static async getProduto(): Promise<Produto[]> {
-    const result = await pool.query(
-      "SELECT * FROM produtos WHERE status = 1 AND quantidade > 0 ORDER BY nome ASC"
-    );
+  static async getProduto(esgotado: boolean): Promise<Produto[]> {
+    let query = "SELECT * FROM produtos WHERE status = 1";
+    const order = " ORDER BY nome ASC;";
+
+    if (esgotado) {
+      query += " AND quantidade = 0";
+    } else {
+      query += " AND quantidade > 0";
+    }
+
+    const result = await pool.query(query + order);
 
     const row: Produto[] = result.rows;
 
