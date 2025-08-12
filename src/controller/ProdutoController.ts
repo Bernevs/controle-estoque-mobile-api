@@ -29,7 +29,9 @@ export class ProdutoController {
 
   static async getProduto(req: Request, res: Response): Promise<any> {
     try {
-      const result = await ProdutoService.getProduto();
+      const { esgotado } = req.query;
+
+      let result = await ProdutoService.getProduto(Boolean(esgotado));
 
       return res.status(200).json({ produto: result });
     } catch (error: any) {

@@ -8,8 +8,8 @@ export class ProdutoService {
     return result;
   }
 
-  static async getProduto(): Promise<Produto[]> {
-    const result = await ProdutoRepository.getProduto();
+  static async getProduto(esgotado: boolean): Promise<Produto[]> {
+    const result = await ProdutoRepository.getProduto(esgotado);
 
     return result;
   }
