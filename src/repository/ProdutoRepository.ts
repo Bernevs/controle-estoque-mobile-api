@@ -55,13 +55,17 @@ export class ProdutoRepository {
     );
   }
 
-  static async getProdutoById(id: number): Promise<Produto> {
+  static async getProdutoById(id: number): Promise<Produto | null> {
     const result = await pool.query(
       "SELECT * FROM produtos WHERE id = $1 AND status = 1",
       [id]
     );
 
     const row: Produto = result.rows[0];
+
+    if (!row) {
+      return null;
+    }
 
     return new Produto({
       id: row.id,
@@ -74,16 +78,20 @@ export class ProdutoRepository {
     });
   }
 
-  static async getPrecoVenda(id: number): Promise<number> {
+  static async getPrecoVenda(id: number): Promise<number | null> {
     const result = await pool.query(
       "SELECT preco_venda FROM produtos WHERE id = $1",
       [id]
     );
 
+    if (result.rows.length === 0) {
+      return null;
+    }
+
     return result.rows[0].preco_venda;
   }
 
-  static async updateProduto(produto: Produto): Promise<Produto> {
+  static async updateProduto(produto: Produto): Promise<Produto | null> {
     const result = await pool.query(
       "UPDATE produtos SET nome = $2, preco_compra = $3, preco_venda = $4, quantidade = $5 WHERE id = $1 AND status = 1 RETURNING*",
       [
@@ -96,6 +104,10 @@ export class ProdutoRepository {
     );
 
     const row: Produto = result.rows[0];
+
+    if (!row) {
+      return null;
+    }
 
     return new Produto({
       id: row.id,
@@ -129,6 +141,10 @@ export class ProdutoRepository {
       "UPDATE produtos SET status = 0 WHERE id = $1",
       [id]
     );
+
+    if (result.rows.length === 0) {
+      return null;
+    }
 
     return result.rows;
   }

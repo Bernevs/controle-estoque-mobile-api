@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Produto } from "../model/Produto";
 import { ProdutoService } from "../service/ProdutoService";
+import { HttpError } from "../errors/HttpError";
 const pdfParse = require("pdf-parse");
 
 export class ProdutoController {
@@ -22,8 +23,12 @@ export class ProdutoController {
 
       return res.status(201).json({ produto: result });
     } catch (error: any) {
-      console.error("Erro ao criar Produto", error);
-      return res.status(500).json({ message: error.message, error: true });
+      console.error("Erro em createProduto:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
+      }
     }
   }
 
@@ -35,8 +40,12 @@ export class ProdutoController {
 
       return res.status(200).json({ produto: result });
     } catch (error: any) {
-      console.error("Erro ao buscar Produto", error);
-      return res.status(500).json({ message: error.message, error: true });
+      console.error("Erro em getProduto:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
+      }
     }
   }
 
@@ -45,15 +54,19 @@ export class ProdutoController {
       const { id } = req.params;
 
       if (!id || isNaN(Number(id))) {
-        return res.status(400).json({ message: "ID inválido", error: true });
+        return res.status(400).json({ message: "ID inválido" });
       }
 
       const result = await ProdutoService.getProdutoById(Number(id));
 
       return res.status(200).json({ produto: result });
     } catch (error: any) {
-      console.error("Erro ao buscar Produto unico", error);
-      return res.status(500).json({ message: error.message, error: true });
+      console.error("Erro em getProdutoById:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
+      }
     }
   }
 
@@ -80,8 +93,12 @@ export class ProdutoController {
         .status(200)
         .json({ message: "Produto alterado com sucesso", produto: result });
     } catch (error: any) {
-      console.error("Erro ao alterar Produto", error);
-      return res.status(500).json({ message: error.message, error: true });
+      console.error("Erro em updateProduto:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
+      }
     }
   }
 
@@ -97,8 +114,12 @@ export class ProdutoController {
 
       return res.status(200).json({ message: "Produto deletado com sucesso" });
     } catch (error: any) {
-      console.error("Erro ao deletar Produto", error);
-      return res.status(500).json({ message: error.message, error: true });
+      console.error("Erro em deleteProduto:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
+      }
     }
   }
 

@@ -1,3 +1,4 @@
+import { NotFoundError } from "../errors/HttpError";
 import { Cliente } from "../model/Cliente";
 import { ClienteRepository } from "../repository/ClienteRepository";
 
@@ -17,29 +18,29 @@ export class ClienteService {
   static async getClienteById(id: number): Promise<Cliente | null> {
     const result = await ClienteRepository.getClienteById(id);
 
+    if (!result) {
+      throw new NotFoundError("Cliente não encontrado");
+    }
+
     return result;
   }
 
   static async updateCliente(id: number, novoNome: string) {
-    const existe = await ClienteService.getClienteById(id);
-
-    if (!existe) {
-      throw new Error("Cliente não encontrado");
-    }
-
     const result = await ClienteRepository.updateCliente(id, novoNome);
+
+    if (!result) {
+      throw new NotFoundError("Cliente não encontrado");
+    }
 
     return result;
   }
 
   static async deleteCliente(id: number) {
-    const existe = await ClienteService.getClienteById(id);
-
-    if (!existe) {
-      throw new Error("Cliente não encontrado");
-    }
-
     const result = await ClienteRepository.deleteCliente(id);
+
+    if (!result) {
+      throw new NotFoundError("Cliente não encontrado");
+    }
 
     return result;
   }

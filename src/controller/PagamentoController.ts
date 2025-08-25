@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Pagamento } from "../model/Pagamento";
 import { PagamentoService } from "../service/PagamentoService";
-import { NotFoundError } from "../errors/NotFoundError";
+import { HttpError } from "../errors/HttpError";
 
 export class PagamentoController {
   static async createPagamento(req: Request, res: Response): Promise<any> {
@@ -30,8 +30,12 @@ export class PagamentoController {
 
       return res.status(200).json({ pagamento: result });
     } catch (error: any) {
-      console.error("Erro ao buscar pagamentos", error);
-      return res.status(500).json({ message: error.message });
+      console.error("Erro em getPagamento:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
+      }
     }
   }
 
@@ -47,12 +51,12 @@ export class PagamentoController {
 
       return res.status(200).json({ pagamento: result });
     } catch (error: any) {
-      console.error("Erro ao buscar pagamento especifico", error);
-
-      if (error instanceof NotFoundError) {
-        return res.status(404).json({ message: error.message });
+      console.error("Erro em getPagamentoById:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
       }
-      return res.status(500).json({ message: error.message });
     }
   }
 
@@ -79,11 +83,12 @@ export class PagamentoController {
 
       return res.status(200).json({ pagamento: result });
     } catch (error: any) {
-      console.error("Erro ao alterar pagamento", error);
-      if (error instanceof NotFoundError) {
-        return res.status(404).json({ message: error.message });
+      console.error("Erro em updatePagamento:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
       }
-      return res.status(500).json({ message: error.message });
     }
   }
 
@@ -97,11 +102,12 @@ export class PagamentoController {
         .status(200)
         .json({ message: "Pagamento deletado com sucesso" });
     } catch (error: any) {
-      console.error("Erro ao deletar pagamento", error);
-      if (error instanceof NotFoundError) {
-        return res.status(404).json({ message: error.message });
+      console.error("Erro em deletePagamento:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
       }
-      return res.status(500).json({ message: error.message });
     }
   }
 }
