@@ -59,13 +59,17 @@ export class PagamentoRepository {
   static async updatePagamento(
     id: number,
     pagamento: Pagamento
-  ): Promise<Pagamento> {
+  ): Promise<Pagamento | null> {
     const result = await pool.query(
       "UPDATE pagamentos SET valor_pago = $2, data_pagamento = $3 WHERE id = $1 RETURNING *",
       [id, pagamento.valor_pago, pagamento.data_pagamento]
     );
 
     const row: Pagamento = result.rows[0];
+
+    if (!row) {
+      return null;
+    }
 
     return new Pagamento({
       id: row.id,

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Cliente } from "../model/Cliente";
 import { ClienteService } from "../service/ClienteService";
+import { HttpError } from "../errors/HttpError";
 
 export class ClienteController {
   static async createCliente(req: Request, res: Response): Promise<any> {
@@ -13,8 +14,12 @@ export class ClienteController {
 
       return res.status(201).json({ cliente: result });
     } catch (error: any) {
-      console.error("Erro ao criar Cliente", error);
-      return res.status(500).json({ message: error.message, error: true });
+      console.error("Erro em createCliente:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
+      }
     }
   }
 
@@ -24,8 +29,12 @@ export class ClienteController {
 
       return res.status(200).json({ cliente: result });
     } catch (error: any) {
-      console.error("Erro ao buscar Cliente", error);
-      return res.status(500).json({ message: error.message, error: true });
+      console.error("Erro em getCliente:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
+      }
     }
   }
 
@@ -41,8 +50,12 @@ export class ClienteController {
 
       return res.status(200).json({ cliente: cliente });
     } catch (error: any) {
-      console.error("Erro ao buscar Cliente unico", error);
-      return res.status(500).json({ message: error.message, error: true });
+      console.error("Erro em getClienteById:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
+      }
     }
   }
 
@@ -63,8 +76,12 @@ export class ClienteController {
 
       return res.status(200).json({ cliente: result });
     } catch (error: any) {
-      console.error("Erro ao atualizar Cliente", error);
-      return res.status(500).json({ message: error.message, error: true });
+      console.error("Erro em updateCliente:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
+      }
     }
   }
 
@@ -73,14 +90,18 @@ export class ClienteController {
       const { id } = req.params;
 
       if (!id || isNaN(Number(id))) {
-        return res.status(400).json({ message: "ID inválido", error: true });
+        return res.status(400).json({ message: "ID inválido" });
       }
 
       await ClienteService.deleteCliente(Number(id));
       return res.status(204).json({ message: "Cliente deletado!" });
     } catch (error: any) {
-      console.error("Erro ao deletar Cliente", error);
-      return res.status(500).json({ message: error.message, error: true });
+      console.error("Erro em deleteCliente:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
+      }
     }
   }
 }

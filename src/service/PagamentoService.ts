@@ -1,4 +1,4 @@
-import { NotFoundError } from "../errors/NotFoundError";
+import { NotFoundError } from "../errors/HttpError";
 import { Pagamento } from "../model/Pagamento";
 import { PagamentoRepository } from "../repository/PagamentoRepository";
 
@@ -26,14 +26,22 @@ export class PagamentoService {
   }
 
   static async updatePagamento(id: number, pagamento: Pagamento) {
-    await this.getPagamentoById(id);
+    const result = await PagamentoRepository.updatePagamento(id, pagamento);
 
-    return await PagamentoRepository.updatePagamento(id, pagamento);
+    if (!result) {
+      throw new NotFoundError("Pagamento não encontrado");
+    }
+
+    return result;
   }
 
   static async deletePagamento(id: number) {
-    await this.getPagamentoById(id);
+    const result = await PagamentoRepository.deletePagamento(id);
 
-    return await PagamentoRepository.deletePagamento(id);
+    if (!result) {
+      throw new NotFoundError("Pagamento não encontrado");
+    }
+
+    return result;
   }
 }
