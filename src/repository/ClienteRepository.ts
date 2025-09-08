@@ -48,6 +48,32 @@ export class ClienteRepository {
     return new Cliente({ id: row.id, nome: row.nome, status: row.status });
   }
 
+  static async getValorCliente() {
+    const result = await pool.query(`
+      SELECT 
+    c.id,
+    c.nome,
+    COALESCE(p.total_gasto, 0) AS total_gasto,
+    COALESCE(pg.total_pago, 0) AS total_pago
+FROM clientes c
+LEFT JOIN (
+    SELECT cliente_id, SUM(preco_venda * quantidade) AS total_gasto
+    FROM pedidos
+    GROUP BY cliente_id
+) p ON p.cliente_id = c.id
+LEFT JOIN (
+    SELECT cliente_id, SUM(valor_pago) AS total_pago
+    FROM pagamentos
+    GROUP BY cliente_id
+) pg ON pg.cliente_id = c.id
+WHERE c.status = 1
+ORDER BY c.nome;
+
+      `);
+
+    return result.rows;
+  }
+
   static async updateCliente(
     id: number,
     novoNome: string

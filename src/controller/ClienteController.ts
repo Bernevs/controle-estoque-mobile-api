@@ -59,6 +59,21 @@ export class ClienteController {
     }
   }
 
+  static async getValorCliente(req: Request, res: Response): Promise<any> {
+    try {
+      const result = await ClienteService.getValorCliente();
+
+      return res.status(200).json({ cliente: result });
+    } catch (error: any) {
+      console.error("Erro em getValorCliente:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
+      }
+    }
+  }
+
   static async updateCliente(req: Request, res: Response): Promise<any> {
     try {
       const { id } = req.params;

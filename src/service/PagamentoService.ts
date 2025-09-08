@@ -15,6 +15,12 @@ export class PagamentoService {
     return result;
   }
 
+  static async getValorPago(cliente_id: number): Promise<number> {
+    const result = await PagamentoRepository.getValorPago(cliente_id);
+
+    return result;
+  }
+
   static async getPagamentoById(id: number): Promise<Pagamento> {
     const result = await PagamentoRepository.getPagamentoById(id);
 

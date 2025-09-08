@@ -39,6 +39,23 @@ export class PagamentoController {
     }
   }
 
+  static async getValorPago(req: Request, res: Response): Promise<any> {
+    try {
+      const { cliente_id } = req.params;
+
+      const result = await PagamentoService.getValorPago(Number(cliente_id));
+
+      return res.status(200).json({ pagamento: result });
+    } catch (error: any) {
+      console.error("Erro em getPagamento:", error.message);
+      if (error instanceof HttpError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      } else {
+        return res.status(500).json({ message: error.message });
+      }
+    }
+  }
+
   static async getPagamentoById(req: Request, res: Response): Promise<any> {
     try {
       const { id } = req.params;
