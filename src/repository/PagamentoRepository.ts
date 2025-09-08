@@ -37,6 +37,21 @@ export class PagamentoRepository {
     );
   }
 
+  static async getValorPago(cliente_id: number): Promise<number> {
+    const result = await pool.query(
+      "SELECT SUM(valor_pago) FROM pagamentos WHERE cliente_id = $1",
+      [cliente_id]
+    );
+
+    const row = result.rows[0];
+
+    if (!row || !row.sum) {
+      return 0;
+    }
+
+    return Number(row.sum);
+  }
+
   static async getPagamentoById(id: number): Promise<Pagamento | null> {
     const result = await pool.query("SELECT * FROM pagamentos WHERE id = $1", [
       id,

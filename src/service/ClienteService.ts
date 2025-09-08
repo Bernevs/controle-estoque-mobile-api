@@ -25,6 +25,12 @@ export class ClienteService {
     return result;
   }
 
+  static async getValorCliente() {
+    const result = await ClienteRepository.getValorCliente();
+
+    return result;
+  }
+
   static async updateCliente(id: number, novoNome: string) {
     const result = await ClienteRepository.updateCliente(id, novoNome);
 
