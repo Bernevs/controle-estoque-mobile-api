@@ -21,7 +21,6 @@ Ela fornece os endpoints necessários para cadastro de clientes, produtos, pedid
 
 - 💳 **Pagamentos**
   - Registro de pagamentos de pedidos.
-  - Suporte a diferentes métodos de pagamento (dinheiro, cartão, etc).
 
 ---
 
@@ -30,9 +29,7 @@ Ela fornece os endpoints necessários para cadastro de clientes, produtos, pedid
 - [Node.js](https://nodejs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Express](https://expressjs.com/)
-- [PostgreSQL](https://www.postgresql.org/) (ou outro banco que você estiver usando)
-- [Prisma](https://www.prisma.io/) *(se estiver usando como ORM)*
-- Outras bibliotecas auxiliares
+- [PostgreSQL](https://www.postgresql.org/)
 
 ---
 
@@ -67,12 +64,7 @@ Ela fornece os endpoints necessários para cadastro de clientes, produtos, pedid
 
 ### Pré-requisitos
 - Node.js instalado
-- PostgreSQL rodando (ou outro banco configurado)
-- `npm` ou `yarn` instalado
-
-
-# Rode as migrations (se usar Prisma)
-npx prisma migrate dev
+- PostgreSQL rodando
 
 # Inicie o servidor
 npm run dev
