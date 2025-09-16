@@ -32,7 +32,7 @@ export class ProdutoRepository {
     const order = " ORDER BY nome ASC;";
 
     if (esgotado) {
-      query += " AND quantidade > 0"; //Essa condição está causando erros no aplicativo. Será ajustado futuramente (IS#29)
+      query += " AND quantidade < 0"; //Essa condição está causando erros no aplicativo. Será ajustado futuramente (IS#29)
     } else {
       query += " AND quantidade > 0";
     }
