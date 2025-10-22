@@ -94,7 +94,7 @@ ORDER BY c.nome;
 
   static async deleteCliente(id: number) {
     const result = await pool.query(
-      "UPDATE clientes SET status = 0 WHERE id = $1",
+      "UPDATE clientes SET status = 0 WHERE id = $1 RETURNING *",
       [id]
     );
 
